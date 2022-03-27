@@ -47,8 +47,27 @@ class Player:
             card.show()
 
 
-deck = Deck()
-p1 = Player("Player-1")
-p2 = Player("Player-2")
-deck.shuffle()
+class WarGame:
+    def __init__(self):
+        self.p1 = Player("Player-1")
+        self.p2 = Player("Player-2")
+        self.deck = Deck()
+        self.deck.shuffle()
+        self.deal()
 
+    def deal(self):
+        while len(self.deck.cards) > 0:
+            self.p1.hand.append(self.deck.cards.pop())
+            if len(self.deck.cards) > 0:
+                self.p2.hand.append(self.deck.cards.pop())
+
+    def print_cards(self):
+        print("Player-1 cards: ")
+        self.p1.showHand()
+        print("\n")
+        print("Player-2 cards: ")
+        self.p2.showHand()
+
+
+game = WarGame()
+game.print_cards()
