@@ -10,21 +10,22 @@ class Deck:
         self.cards = []
         self.build()
 
+    def __str__(self):
+        result = ""
+        for c in self.cards:
+            result = c
+
     def build(self):
         for s in ["Sp", "Cl", "Di", "He"]:
             for v in range(2, 15):
                 self.cards.append(Card(s, v))
-
-    def show(self):
-        for c in self.cards:
-            c.show()
 
     def shuffle(self):
         for i in range(len(self.cards) - 1, 0, -1):
             r = random.randint(0, i)
             self.cards[i], self.cards[r] = self.cards[r], self.cards[i]
 
-    def draw_card(self):
+    def remove_top_card(self):
         return self.cards.pop()
 
 
@@ -36,9 +37,6 @@ class Card:
 
     def __str__(self):
         return "{}-{}, ".format(self.value, self.suit)
-
-    def show(self):
-        print("{}-{}, ".format(self.value, self.suit), end="")
 
 
 class Player:
@@ -58,16 +56,16 @@ class Player:
             i += 1
             if i % 10 == 0:
                 print()
-            card.show()
+            print(card, end="")
         print()
 
 
 def dealCards(p1, p2, deck):
     deck.shuffle()
     while len(deck.cards) > 0:
-        p1.hand.append(deck.draw_card())
+        p1.hand.append(deck.remove_top_card())
         if len(deck.cards) > 0:
-            p2.hand.append(deck.draw_card())
+            p2.hand.append(deck.remove_top_card())
 
 
 def gameTurn(p1, p2, table_cards):
