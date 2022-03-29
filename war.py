@@ -1,42 +1,8 @@
-import random
+from deck import Deck
 
 turn_count = 0
 war_count = 0
 game_over = False
-
-
-class Deck:
-    def __init__(self):
-        self.cards = []
-        self.build()
-
-    def __str__(self):
-        result = ""
-        for c in self.cards:
-            result = c
-
-    def build(self):
-        for s in ["Sp", "Cl", "Di", "He"]:
-            for v in range(2, 15):
-                self.cards.append(Card(s, v))
-
-    def shuffle(self):
-        for i in range(len(self.cards) - 1, 0, -1):
-            r = random.randint(0, i)
-            self.cards[i], self.cards[r] = self.cards[r], self.cards[i]
-
-    def remove_top_card(self):
-        return self.cards.pop()
-
-
-class Card:
-    def __init__(self, suit, val):
-        self.suit = suit
-        self.value = val
-        self.isBattleCard = False
-
-    def __str__(self):
-        return "{}-{}, ".format(self.value, self.suit)
 
 
 class Player:
@@ -59,6 +25,16 @@ class Player:
             print(card, end="")
         print()
 
+    def remove_top_card(self):
+        return self.cards.pop()
+
+    def add_card_to_bottom(self, card):
+        self.cards.insert(0, card)
+        pass
+
+    def add_cards_to_bottom(cardList):
+        pass
+
 
 def dealCards(p1, p2, deck):
     deck.shuffle()
@@ -69,7 +45,6 @@ def dealCards(p1, p2, deck):
 
 
 def gameTurn(p1, p2, table_cards):
-
     global turn_count
     global war_count
     global game_over
