@@ -1,4 +1,5 @@
 from deck import Deck
+import random
 
 turn_count = 0
 war_count = 0
@@ -58,9 +59,15 @@ def gameTurn(p1, p2, table_cards):
     # put battle card on the table
     table_cards.append(p1.battle_card)
     table_cards.append(p2.battle_card)
-    print(f"{p1.battle_card} vs {p2.battle_card}")
+
+    print(f"Battle Cards:\n{p1.battle_card} vs  {p2.battle_card}")
+    print("Cards on table: ")
     for c in table_cards:
-        print(c)
+        print(c, end="")
+    print()
+    p1.showHand()
+    p2.showHand()
+
     card1 = p1.battle_card.value
     card2 = p2.battle_card.value
 
@@ -79,29 +86,33 @@ def gameTurn(p1, p2, table_cards):
         table_cards.append(p2.hand.pop())
 
     elif card1 < card2:
+        shuffle_card_list(table_cards)
         for c in table_cards:
             p2.hand.insert(0, c)
         table_cards.clear()
     else:
+        shuffle_card_list(table_cards)
         for c in table_cards:
             p1.hand.insert(0, c)
         table_cards.clear()
 
 
-def play_game(p1, p2, table_cards):
+def shuffle_card_list(list):
+    for i in range(len(list) - 1, 0, -1):
+        r = random.randint(0, i)
+        list[i], list[r] = list[r], list[i]
+
+
+def play_game(p1, p2):
+    table_cards = []
     dealCards(p1, p2, deck)
-    p1.showHand()
-    p2.showHand()
     while game_over != True:
         print(f"\n***** turn {turn_count} *****")
         gameTurn(p1, p2, table_cards)
-        p1.showHand()
-        p2.showHand()
     print(f"War count: {war_count}")
 
 
-table_cards = []
 p1 = Player("Player 1")
 p2 = Player("Player 2")
 deck = Deck()
-play_game(p1, p2, table_cards)
+play_game(p1, p2)
