@@ -13,7 +13,7 @@ class Deck:
         return result
 
     def build(self):
-        for s in ["Sp", "Cl", "Di", "He"]:
+        for s in ["s", "c", "d", "h"]:
             for v in range(2, 15):
                 self.cards.append(Card(s, v))
 
@@ -30,7 +30,6 @@ class Card:
     def __init__(self, suit, val):
         self.suit = suit
         self.value = val
-        self.isBattleCard = False
 
     def __str__(self):
-        return "{}-{}, ".format(self.value, self.suit)
+        return "{}{}, ".format(self.value, self.suit)

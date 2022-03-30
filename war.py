@@ -1,6 +1,8 @@
 from deck import Deck
 import random
 
+DEBUG = False
+
 turn_count = 0
 war_count = 0
 game_over = False
@@ -13,11 +15,21 @@ class Player:
         self.battle_card = None
 
     def draw(self, deck):
-        self.hand.append(deck.draw_card())
+        self.hand.append(deck.remove_top_card())
         return self
 
+    def give_cards(self, cards, num):
+        for i in range(num):
+            cards.append(self.hand.pop())
+
+    def win_cards(self, cards):
+        shuffle(cards)
+        for c in cards:
+            self.hand.insert(0, c)
+        cards.clear()
+
     def showHand(self):
-        print("{} has {} cards: ".format(self.name, len(self.hand)))
+        print(f"{self.name} has {len(self.hand)} cards: ")
         i = 0
         for card in self.hand:
             i += 1
@@ -26,23 +38,13 @@ class Player:
             print(card, end="")
         print()
 
-    def remove_top_card(self):
-        return self.cards.pop()
-
-    def add_card_to_bottom(self, card):
-        self.cards.insert(0, card)
-        pass
-
-    def add_cards_to_bottom(cardList):
-        pass
-
 
 def dealCards(p1, p2, deck):
     deck.shuffle()
     while len(deck.cards) > 0:
-        p1.hand.append(deck.remove_top_card())
+        p1.draw(deck)
         if len(deck.cards) > 0:
-            p2.hand.append(deck.remove_top_card())
+            p2.draw(deck)
 
 
 def gameTurn(p1, p2, table_cards):
@@ -60,59 +62,79 @@ def gameTurn(p1, p2, table_cards):
     table_cards.append(p1.battle_card)
     table_cards.append(p2.battle_card)
 
-    print(f"Battle Cards:\n{p1.battle_card} vs  {p2.battle_card}")
-    print("Cards on table: ")
-    for c in table_cards:
-        print(c, end="")
-    print()
-    p1.showHand()
-    p2.showHand()
-
     card1 = p1.battle_card.value
     card2 = p2.battle_card.value
 
     # go to war
     if card1 == card2:
         war_count += 1
-        if len(p1.hand) < 4 or len(p2.hand) < 4:
+        if len(p1.hand) < 3 or len(p2.hand) < 3:
             game_over = True
             return
-        table_cards.append(p1.hand.pop())
-        table_cards.append(p1.hand.pop())
-        table_cards.append(p1.hand.pop())
-
-        table_cards.append(p2.hand.pop())
-        table_cards.append(p2.hand.pop())
-        table_cards.append(p2.hand.pop())
+        p1.give_cards(table_cards, 3)
+        p2.give_cards(table_cards, 3)
 
     elif card1 < card2:
-        shuffle_card_list(table_cards)
-        for c in table_cards:
-            p2.hand.insert(0, c)
-        table_cards.clear()
+        p2.win_cards(table_cards)
     else:
-        shuffle_card_list(table_cards)
-        for c in table_cards:
-            p1.hand.insert(0, c)
-        table_cards.clear()
+        p1.win_cards(table_cards)
 
 
-def shuffle_card_list(list):
+def display_turn(p1, p2, table_cards):
+    print(f"\n***** turn {turn_count} *****")
+    print(f"Battle Cards:\n{p1.battle_card}  vs  {p2.battle_card}")
+    print("Cards on table: ")
+    for c in table_cards:
+        print(c, end="")
+    print()
+    p1.showHand()
+    p2.showHand()
+    print(f"Turn count: {turn_count}")
+    print(f"War count: {war_count}")
+
+
+def shuffle(list):
     for i in range(len(list) - 1, 0, -1):
         r = random.randint(0, i)
         list[i], list[r] = list[r], list[i]
 
 
-def play_game(p1, p2):
+def play_game(turns, wars):
+    global turn_count
+    global war_count
+    global game_over
+    global DEBUG
+
+    p1 = Player("Adam")
+    p2 = Player("Eve")
+    deck = Deck()
     table_cards = []
     dealCards(p1, p2, deck)
     while game_over != True:
-        print(f"\n***** turn {turn_count} *****")
         gameTurn(p1, p2, table_cards)
-    print(f"War count: {war_count}")
+        if DEBUG == True:
+            display_turn(p1, p2, table_cards)
+
+    turns.append(turn_count)
+    wars.append(war_count)
+
+    turn_count = 0
+    war_count = 0
+    game_over = False
 
 
-p1 = Player("Player 1")
-p2 = Player("Player 2")
-deck = Deck()
-play_game(p1, p2)
+def main():
+    GAMES_PLAYED = 20
+
+    wars = []
+    turns = []
+
+    for i in range(GAMES_PLAYED):
+        play_game(turns, wars)
+
+    print(turns)
+    print(globals())
+
+
+if __name__ == "__main__":
+    main()
