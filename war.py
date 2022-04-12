@@ -1,7 +1,7 @@
 from deck import Deck
 import random
 
-DEBUG = False
+DEBUG = True
 
 turn_count = 0
 war_count = 0
@@ -123,8 +123,33 @@ def play_game(turns, wars):
     game_over = False
 
 
+def results(turns_list, war_list, GAMES_PLAYED):
+
+    longest = max(turns_list)
+    shortest = min(turns_list)
+    most = max(war_list)
+    least = min(war_list)
+    avg_turns = int(sum(turns_list) / len(turns_list))
+    avg_wars = int(sum(war_list) / len(war_list))
+
+    print("\n\n\n\n")
+    print(f"Out of {GAMES_PLAYED} games played:")
+    print("--------------------------------------------------")
+    print(f"- Average game: {avg_turns} turns")
+    print(f"- Longest game: {longest} turns")
+    print(f"- Shortest game: {shortest} turns")
+    print(f"- Average wars in a game: {avg_wars} wars")
+    print(f"- Most wars in a game: {most} wars")
+    print(f"- Least wars in a game: {least} wars")
+    # print(f"- Highest war to turn ratio: {} turns per war")
+    # print(f"- Lowest war to turn ratio: {} turns per war")
+    # print(f"- Player 1 win ratio: ")
+    # print(f"- Player 2 win ratio: ")
+    print("\n\n\n\n")
+
+
 def main():
-    GAMES_PLAYED = 20
+    GAMES_PLAYED = 10000
 
     wars = []
     turns = []
@@ -132,8 +157,7 @@ def main():
     for i in range(GAMES_PLAYED):
         play_game(turns, wars)
 
-    print(turns)
-    print(globals())
+    results(turns, wars, GAMES_PLAYED)
 
 
 if __name__ == "__main__":
