@@ -17,7 +17,7 @@ class Deck:
             for v in range(2, 15):
                 self.cards.append(Card(s, v))
 
-    def shuffle(self):
+    def shuffle_deck(self):
         for i in range(len(self.cards) - 1, 0, -1):
             r = random.randint(0, i)
             self.cards[i], self.cards[r] = self.cards[r], self.cards[i]

@@ -1,50 +1,26 @@
 from deck import Deck
+from player import Player
 import random
 
-DEBUG = True
+DEBUG = False
 
 turn_count = 0
 war_count = 0
 game_over = False
 
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.hand = []
-        self.battle_card = None
-
-    def draw(self, deck):
-        self.hand.append(deck.remove_top_card())
-        return self
-
-    def give_cards(self, cards, num):
-        for i in range(num):
-            cards.append(self.hand.pop())
-
-    def win_cards(self, cards):
-        shuffle(cards)
-        for c in cards:
-            self.hand.insert(0, c)
-        cards.clear()
-
-    def showHand(self):
-        print(f"{self.name} has {len(self.hand)} cards: ")
-        i = 0
-        for card in self.hand:
-            i += 1
-            if i % 10 == 0:
-                print()
-            print(card, end="")
-        print()
-
-
 def dealCards(p1, p2, deck):
-    deck.shuffle()
+    deck.shuffle_deck()
     while len(deck.cards) > 0:
         p1.draw(deck)
         if len(deck.cards) > 0:
             p2.draw(deck)
+
+
+def shuffle(list):
+    for i in range(len(list) - 1, 0, -1):
+        r = random.randint(0, i)
+        list[i], list[r] = list[r], list[i]
 
 
 def gameTurn(p1, p2, table_cards):
@@ -91,12 +67,6 @@ def display_turn(p1, p2, table_cards):
     p2.showHand()
     print(f"Turn count: {turn_count}")
     print(f"War count: {war_count}")
-
-
-def shuffle(list):
-    for i in range(len(list) - 1, 0, -1):
-        r = random.randint(0, i)
-        list[i], list[r] = list[r], list[i]
 
 
 def play_game(turns, wars):
@@ -146,19 +116,3 @@ def results(turns_list, war_list, GAMES_PLAYED):
     # print(f"- Player 1 win ratio: ")
     # print(f"- Player 2 win ratio: ")
     print("\n\n\n\n")
-
-
-def main():
-    GAMES_PLAYED = 10000
-
-    wars = []
-    turns = []
-
-    for i in range(GAMES_PLAYED):
-        play_game(turns, wars)
-
-    results(turns, wars, GAMES_PLAYED)
-
-
-if __name__ == "__main__":
-    main()
