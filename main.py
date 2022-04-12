@@ -1,8 +1,12 @@
 import war
+import sys
 
 
 def main():
-    GAMES_PLAYED = 10000
+    if len(sys.argv) == 2:
+        GAMES_PLAYED = int(sys.argv[1])
+    else:
+        GAMES_PLAYED = 10000
 
     wars = []
     turns = []
