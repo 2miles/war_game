@@ -8,14 +8,16 @@ class Deck:
 
     def __str__(self):
         result = ""
-        for c in self.cards:
-            result += c
+        for card in self.cards:
+            result += card
         return result
 
     def build(self):
-        for s in ["s", "c", "d", "h"]:
-            for v in range(2, 15):
-                self.cards.append(Card(s, v))
+        # In this deck an Ace is worh more than the other cards
+        # so it will take the value 15. There is no card with value 1.
+        for suit in ["s", "c", "d", "h"]:
+            for value in range(2, 15):
+                self.cards.append(Card(suit, value))
 
     def shuffle_deck(self):
         for i in range(len(self.cards) - 1, 0, -1):

@@ -12,6 +12,7 @@ class Player:
         return self
 
     def give_cards(self, cards, num):
+        # takes num cards from player into cards[]
         for i in range(num):
             cards.append(self.hand.pop())
 
