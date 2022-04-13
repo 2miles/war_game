@@ -1,4 +1,4 @@
-import war
+import game
 
 
 class Player:
@@ -17,17 +17,20 @@ class Player:
             cards.append(self.hand.pop())
 
     def win_cards(self, cards):
-        war.shuffle(cards)
+        game.shuffle(cards)
         for c in cards:
             self.hand.insert(0, c)
         cards.clear()
 
     def showHand(self):
-        print(f"{self.name} has {len(self.hand)} cards: ")
+        # print(f"{self.name} has {len(self.hand)} cards: ")
+        print(f"{self.name.upper()} DECK ({len(self.hand)} cards): ")
+        print("------------------------------------------")
         i = 0
         for card in self.hand:
             i += 1
             if i % 10 == 0:
                 print()
             print(card, end="")
+        print()
         print()
